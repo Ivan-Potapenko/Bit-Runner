@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - Fon
+  - UsePP
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BarrierMaskLayer
+    uniqueID: 173096489
+    locked: 0
+  - name: PlayerMaskLayer
+    uniqueID: 2622212021
     locked: 0
