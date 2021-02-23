@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Events {
 
+    [CreateAssetMenu(fileName ="newEvent",menuName ="Event")]
     public class Event : ScriptableObject {
 
         private List<Action> _listeners;

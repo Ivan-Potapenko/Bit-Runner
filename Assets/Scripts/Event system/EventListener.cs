@@ -8,7 +8,7 @@ namespace Events {
         [SerializeField]
         private Event _someEvent;
 
-        public event Action ActionToDo = delegate { };
+        public event Action ActionsToDo = delegate { };
 
         private void OnEnable() {
             _someEvent.AddListener(OnEventHappend);
@@ -19,7 +19,7 @@ namespace Events {
         }
 
         private void OnEventHappend() {
-            ActionToDo.Invoke();
+            ActionsToDo.Invoke();
         }
 
     }
