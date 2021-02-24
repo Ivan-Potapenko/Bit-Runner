@@ -248,6 +248,10 @@ PrefabInstance:
       propertyPath: _environmentPrefabs.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5278078215109678108, guid: b679129075f3f0e469b5d2c0b726191f, type: 3}
+      propertyPath: _distanceToDeactivation
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 6675191414356808822, guid: b679129075f3f0e469b5d2c0b726191f, type: 3}
       propertyPath: m_TagString
       value: Player
