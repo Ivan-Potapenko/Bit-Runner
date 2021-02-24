@@ -17,8 +17,9 @@ namespace Environments
         private int _objectsCountInPool;
 
         [SerializeField]
-        private int _distanceToDeactivation = 20;
+        private int _distanceToEnvironmentDeactivation = 20;
 
+        [SerializeField]
         private Queue<GameObject> _activeEnvironment;
 
 
@@ -43,6 +44,10 @@ namespace Environments
 
         private void PutEnvironment()
         {
+            if(_activeEnvironment==null)
+            {
+                _activeEnvironment = new Queue<GameObject>();
+            }
             int indexOfEnvironment = Random.Range(0, _inactiveEnvironment.Count);
             _endOfLastAddedEvironment = _inactiveEnvironment[indexOfEnvironment].GetComponent<Environment>().EndOfEvironment;
 
@@ -52,8 +57,6 @@ namespace Environments
             environment.SetActive(true);
             environment.transform.position = new Vector2(0, gameObject.transform.position.y);
             _activeEnvironment.Enqueue(environment);
-
-
         }
 
         private void OnEnable()
@@ -79,8 +82,8 @@ namespace Environments
             {
                 PutEnvironment();
             }
-
-            if ((_activeEnvironment.Peek().transform.position.y + _distanceToDeactivation) < gameObject.transform.position.y)
+            
+            if ((_activeEnvironment.Peek().transform.position.y + _distanceToEnvironmentDeactivation) < gameObject.transform.position.y)
             {
                 DeactivationOfTheEnvironment();
             }
