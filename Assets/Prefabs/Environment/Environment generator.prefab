@@ -49,6 +49,7 @@ MonoBehaviour:
   - {fileID: 3993279256056211862, guid: b1236cb23d4194e4db6ee2bfb475e395, type: 3}
   _updateEventListner: {fileID: 1261479986468415729}
   _objectsCountInPool: 2
+  _distanceToEnvironmentDeactivation: 40
 --- !u!114 &1261479986468415729
 MonoBehaviour:
   m_ObjectHideFlags: 0
