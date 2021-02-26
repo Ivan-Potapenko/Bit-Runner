@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Events;
 
@@ -82,7 +81,6 @@ namespace Environments
             {
                 PutEnvironment();
             }
-            
             if ((_activeEnvironment.Peek().transform.position.y + _distanceToEnvironmentDeactivation) < gameObject.transform.position.y)
             {
                 DeactivationOfTheEnvironment();
