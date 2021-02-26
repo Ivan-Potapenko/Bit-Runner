@@ -366,6 +366,8 @@ MonoBehaviour:
   _playerSettings: {fileID: 11400000, guid: 3275b9e0287733240bc3afc4f03be793, type: 2}
   _fixedUpdateEventListner: {fileID: 8711116607087255842}
   _playerRigidbody: {fileID: 6590513601610704774}
+  _playerCube: {fileID: 6675191416159616928}
+  _playerCubePositionX: 4.12605
 --- !u!114 &8711116607087255842
 MonoBehaviour:
   m_ObjectHideFlags: 0
