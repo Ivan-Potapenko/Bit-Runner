@@ -1,33 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
-{
-    public static UIManager Instance;
 
-    [SerializeField]
-    private Button _playButton;
+namespace UI {
+    public class UIManager : MonoBehaviour {
+        public static UIManager Instance;
 
-    private void Awake() {
-        if (Instance != null) {
-            Destroy(gameObject);
-            return;
+        private void Awake() {
+            if (Instance != null) {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        public void LoadGameplayScene() {
+            SceneManager.LoadScene("Gameplay");
+        }
+        
+        public void LoadMenuScene() {
+            SceneManager.LoadScene("Menu");
+        }
+
     }
 
-    private void OnEnable() {
-        _playButton.onClick.AddListener(LoadGameplayScene);
-    }
-
-    private void LoadGameplayScene() {
-        SceneManager.LoadScene("Gameplay");
-    }
-
-    
 }
