@@ -11,7 +11,6 @@ namespace Player
         [SerializeField]
         private PlayerMove _playerMove;
 
-        
         private void OnEnable()
         {
             _updateEventListner.ActionsToDo += BehaviourUpdate;
@@ -21,23 +20,30 @@ namespace Player
         {
             _updateEventListner.ActionsToDo -= BehaviourUpdate;
         }
+        
+
 
         void BehaviourUpdate()
         {
+#if DEBUG
             if (Input.GetMouseButtonDown(0))
             {
-                if(Input.mousePosition.x>Screen.width/2)
-                {
-                    _playerMove.ChangePlayerCubePositionToRight();
-                }
-                if (Input.mousePosition.x <= Screen.width / 2)
-                {
-                    _playerMove.ChangePlayerCubePositionToLeft();
+                _playerMove.ChangePositionX();
+            }
 
+#else
+            if ( Input.touchCount>0)
+            {
+                for(int i = 0; i< Input .touchCount;i++)
+                {
+                    if(Input.touches[i].phase==TouchPhase.Began)
+                    {
+                        _playerMove.ChangePositionX();
+                    }
                 }
             }
+#endif
         }
-
     }
 
 }

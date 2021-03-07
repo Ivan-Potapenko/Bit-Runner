@@ -16,12 +16,17 @@ namespace Player
 
         [SerializeField]
         private GameObject _playerCube;
+                
 
         [SerializeField]
         private float _playerCubePositionX;
 
         private void Start()
         {
+            //Test
+            _playerSettings.PlayerMove = true;
+            _playerSettings.PlayerPositionLeft = false  ;
+            //Test
             _playerCubePositionX = _playerCube.transform.position.x;
         }
 
@@ -34,35 +39,36 @@ namespace Player
         {
             _fixedUpdateEventListner.ActionsToDo -= BehaviourFixedUpdate;
         }
-
-        private void ChangePositionX(float positionX)
+        
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            _playerCube.transform.position = new Vector3(positionX,_playerCube.transform.position.y);
-        }
-
-        public void ChangePlayerCubePositionToLeft()
-        {
-            if(!_playerSettings.PlayerPositionLeft)
+            if(collision.gameObject.tag=="Barrier")
             {
-                ChangePositionX(-_playerCubePositionX);
-                _playerSettings.PlayerPositionLeft = true;
+                _playerSettings.PlayerMove = false;
             }
         }
 
-        public void ChangePlayerCubePositionToRight()
+
+        public void ChangePositionX()
         {
-            if (_playerSettings.PlayerPositionLeft)
+            if(_playerSettings.PlayerPositionLeft)
             {
-                ChangePositionX(_playerCubePositionX);
-                _playerSettings.PlayerPositionLeft = false;
+                _playerCube.transform.position = new Vector3(_playerCubePositionX, _playerCube.transform.position.y);
             }
+            else
+            {
+                _playerCube.transform.position = new Vector3(-_playerCubePositionX, _playerCube.transform.position.y);
+            }
+            _playerSettings.PlayerPositionLeft = !_playerSettings.PlayerPositionLeft;
+            
         }
+
 
         private void BehaviourFixedUpdate()
         {
             if(_playerSettings.PlayerMove)
             {
-                _playerRigidbody.MovePosition(transform.position + transform.up * Time.fixedDeltaTime * _playerSettings.PlayerSpeed);
+                _playerRigidbody.velocity = new Vector2(0,_playerSettings.PlayerSpeed);
             }
         }
 
