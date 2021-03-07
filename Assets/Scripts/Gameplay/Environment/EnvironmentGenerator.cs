@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Events;
+using System.Collections;
+
 
 namespace Environments
 {
@@ -10,81 +11,102 @@ namespace Environments
         private List<GameObject> _environmentPrefabs;
 
         [SerializeField]
-        private EventListener _updateEventListner;
+        private float _distanceToEnvironmentDeactivation;
+
+        private Queue<Environment> _disabledEnvironments;
+
+        private Queue<Environment> _enabledEnviroments;
 
         [SerializeField]
-        private int _objectsCountInPool;
+        private int _enabledEnviromentCount;
 
         [SerializeField]
-        private int _distanceToEnvironmentDeactivation = 20;
+        private Environment _environmentActivatedLast;
 
-        [SerializeField]
-        private Queue<GameObject> _activeEnvironment;
-
-
-        private List<GameObject> _inactiveEnvironment;
-        private GameObject _endOfLastAddedEvironment;
+        private Transform _transform;
 
 
-        private void Start()
+        void Start()
         {
-            _inactiveEnvironment = new List<GameObject>();
-            foreach (var prefab in _environmentPrefabs)
+            _disabledEnvironments = new Queue<Environment>();
+            _enabledEnviroments = new Queue<Environment>();
+            _transform = GetComponent<Transform>();
+            while (_environmentPrefabs.Count > 0)
             {
-                for (int i = 0; i < _objectsCountInPool; i++)
+                int randomIndex = Random.Range(0, _environmentPrefabs.Count);
+                var environment = Instantiate(_environmentPrefabs[randomIndex]).GetComponent<Environment>();
+                environment.gameObject.SetActive(false);
+                environment.DifferencePositionYBetweenObjectAndEnd = environment.EnvironmentTransform.position.y
+                    - environment.EndOfEvironment.position.y;
+                _environmentPrefabs.RemoveAt(randomIndex);
+                _disabledEnvironments.Enqueue(environment);
+                _disabledEnvironments.Peek().EnvironmentTransform = _disabledEnvironments.Peek().GetComponent<Transform>();
+            }
+            ActivationEnvironment();
+            StartCoroutine(DistanceCheck());
+        }
+
+
+        void ActivationEnvironment()
+        {
+            
+            if (_disabledEnvironments.Count == 0)
+            {
+                return;
+            }
+                
+            int randomGetNum = Random.Range(0, 2);
+
+            if (randomGetNum == 0)
+            {
+                var secondEnviroment = _disabledEnvironments.Dequeue();
+                _environmentActivatedLast = _disabledEnvironments.Dequeue();
+                _disabledEnvironments.Enqueue(secondEnviroment);
+
+                
+                _environmentActivatedLast.gameObject.SetActive(true);
+
+                _enabledEnviroments.Enqueue(_environmentActivatedLast);
+            }
+            else
+            {
+                _environmentActivatedLast = _disabledEnvironments.Dequeue();
+                _environmentActivatedLast.gameObject.SetActive(true);
+                _enabledEnviroments.Enqueue(_environmentActivatedLast);
+            }
+            _environmentActivatedLast.EnvironmentTransform.position = new Vector2(_environmentActivatedLast.EnvironmentTransform.position.x,
+                    _transform.position.y);
+        }
+
+        void DeactivationEnvironment()
+        {
+            if(_enabledEnviroments.Count==0)
+            {
+                return;
+            }
+
+            var environmentToDeactivation = _enabledEnviroments.Dequeue();
+            environmentToDeactivation.gameObject.SetActive(false);
+            _disabledEnvironments.Enqueue(environmentToDeactivation);
+        }
+
+        IEnumerator DistanceCheck()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.1f);
+
+                if(_environmentActivatedLast.transform.position.y - _environmentActivatedLast.DifferencePositionYBetweenObjectAndEnd <
+                    _transform.position.y)
                 {
-                    var newEnvironment = Instantiate(prefab);
-                    newEnvironment.SetActive(false);
-                    _inactiveEnvironment.Add(newEnvironment);
+                    ActivationEnvironment();
+                    if(_enabledEnviromentCount < _enabledEnviroments.Count)
+                    {
+                        DeactivationEnvironment();
+                    }
                 }
             }
-            PutEnvironment();
         }
 
-        private void PutEnvironment()
-        {
-            if(_activeEnvironment==null)
-            {
-                _activeEnvironment = new Queue<GameObject>();
-            }
-            int indexOfEnvironment = Random.Range(0, _inactiveEnvironment.Count);
-            _endOfLastAddedEvironment = _inactiveEnvironment[indexOfEnvironment].GetComponent<Environment>().EndOfEvironment;
-
-            var environment = _inactiveEnvironment[indexOfEnvironment];
-            _inactiveEnvironment.RemoveAt(indexOfEnvironment);
-
-            environment.SetActive(true);
-            environment.transform.position = new Vector2(0, gameObject.transform.position.y);
-            _activeEnvironment.Enqueue(environment);
-        }
-
-        private void OnEnable()
-        {
-            _updateEventListner.ActionsToDo += BehaviourUpdate;
-        }
-
-        private void OnDisable()
-        {
-            _updateEventListner.ActionsToDo -= BehaviourUpdate;
-        }
-
-        void DeactivationOfTheEnvironment()
-        {
-            var environment = _activeEnvironment.Dequeue();
-            environment.SetActive(false);
-            _inactiveEnvironment.Add(environment);
-        }
-
-        private void BehaviourUpdate()
-        {
-            if (_endOfLastAddedEvironment.transform.position.y < gameObject.transform.position.y)
-            {
-                PutEnvironment();
-            }
-            if ((_activeEnvironment.Peek().transform.position.y + _distanceToEnvironmentDeactivation) < gameObject.transform.position.y)
-            {
-                DeactivationOfTheEnvironment();
-            }
-        }
     }
 }

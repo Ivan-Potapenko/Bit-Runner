@@ -4,6 +4,12 @@ namespace Environments
 {
     public class Environment : MonoBehaviour
     {
-        public GameObject EndOfEvironment;  
+        public Transform EndOfEvironment;
+
+        public Transform EnvironmentTransform;
+
+        public float DifferencePositionYBetweenObjectAndEnd;
+
+
     }
 }
