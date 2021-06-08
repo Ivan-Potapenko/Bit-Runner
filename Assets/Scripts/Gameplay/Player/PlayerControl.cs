@@ -20,10 +20,10 @@ namespace Player
         {
             _updateEventListner.ActionsToDo -= BehaviourUpdate;
         }
-        
 
 
-        void BehaviourUpdate()
+
+        private void BehaviourUpdate()
         {
 #if DEBUG
             if (Input.GetMouseButtonDown(0))

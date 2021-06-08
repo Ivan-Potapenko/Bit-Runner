@@ -28,6 +28,13 @@ namespace Environments
 
         void Start()
         {
+            EnvironmentInitialization();
+            ActivationEnvironment();
+            StartCoroutine(DistanceCheck());
+        }
+
+        private void EnvironmentInitialization()
+        {
             _disabledEnvironments = new Queue<Environment>();
             _enabledEnviroments = new Queue<Environment>();
             _transform = GetComponent<Transform>();
@@ -35,26 +42,25 @@ namespace Environments
             {
                 int randomIndex = Random.Range(0, _environmentPrefabs.Count);
                 var environment = Instantiate(_environmentPrefabs[randomIndex]).GetComponent<Environment>();
+
                 environment.gameObject.SetActive(false);
+
                 environment.DifferencePositionYBetweenObjectAndEnd = environment.EnvironmentTransform.position.y
                     - environment.EndOfEvironment.position.y;
                 _environmentPrefabs.RemoveAt(randomIndex);
                 _disabledEnvironments.Enqueue(environment);
                 _disabledEnvironments.Peek().EnvironmentTransform = _disabledEnvironments.Peek().GetComponent<Transform>();
             }
-            ActivationEnvironment();
-            StartCoroutine(DistanceCheck());
         }
 
-
-        void ActivationEnvironment()
+        private void ActivationEnvironment()
         {
-            
+
             if (_disabledEnvironments.Count == 0)
             {
                 return;
             }
-                
+
             int randomGetNum = Random.Range(0, 2);
 
             if (randomGetNum == 0)
@@ -63,7 +69,7 @@ namespace Environments
                 _environmentActivatedLast = _disabledEnvironments.Dequeue();
                 _disabledEnvironments.Enqueue(secondEnviroment);
 
-                
+
                 _environmentActivatedLast.gameObject.SetActive(true);
 
                 _enabledEnviroments.Enqueue(_environmentActivatedLast);
@@ -78,9 +84,9 @@ namespace Environments
                     _transform.position.y);
         }
 
-        void DeactivationEnvironment()
+        private void DeactivationEnvironment()
         {
-            if(_enabledEnviroments.Count==0)
+            if (_enabledEnviroments.Count == 0)
             {
                 return;
             }
@@ -96,11 +102,11 @@ namespace Environments
             {
                 yield return new WaitForSeconds(0.1f);
 
-                if(_environmentActivatedLast.transform.position.y - _environmentActivatedLast.DifferencePositionYBetweenObjectAndEnd <
+                if (_environmentActivatedLast.transform.position.y - _environmentActivatedLast.DifferencePositionYBetweenObjectAndEnd <
                     _transform.position.y)
                 {
                     ActivationEnvironment();
-                    if(_enabledEnviromentCount < _enabledEnviroments.Count)
+                    if (_enabledEnviromentCount < _enabledEnviroments.Count)
                     {
                         DeactivationEnvironment();
                     }

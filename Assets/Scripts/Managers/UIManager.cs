@@ -2,12 +2,16 @@
 using UnityEngine.SceneManagement;
 
 
-namespace UI {
-    public class UIManager : MonoBehaviour {
+namespace UI
+{
+    public class UIManager : MonoBehaviour
+    {
         public static UIManager Instance;
 
-        private void Awake() {
-            if (Instance != null) {
+        private void Awake()
+        {
+            if (Instance != null)
+            {
                 Destroy(gameObject);
                 return;
             }
@@ -16,11 +20,13 @@ namespace UI {
             DontDestroyOnLoad(gameObject);
         }
 
-        public void LoadGameplayScene() {
+        public void LoadGameplayScene()
+        {
             SceneManager.LoadScene("Gameplay");
         }
-        
-        public void LoadMenuScene() {
+
+        public void LoadMenuScene()
+        {
             SceneManager.LoadScene("Menu");
         }
 

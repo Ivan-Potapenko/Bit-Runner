@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 
-namespace Events {
+namespace Events
+{
 
-    public class EventDispatcher : MonoBehaviour {
+    public class EventDispatcher : MonoBehaviour
+    {
 
         [SerializeField]
         private Event _someEvent;
 
-        public void Dispatch() {
+        public void Dispatch()
+        {
             _someEvent.Dispatch();
         }
 

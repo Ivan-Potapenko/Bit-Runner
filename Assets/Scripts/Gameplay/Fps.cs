@@ -7,7 +7,8 @@ public class Fps : MonoBehaviour
     private double lastInterval;
     private int frames = 0;
     private float fps;
-    [SerializeField ]
+
+    [SerializeField]
     private Text text;
 
     void Start()
@@ -26,6 +27,6 @@ public class Fps : MonoBehaviour
             lastInterval = timeNow;
             text.text = "" + fps.ToString("f2");
         }
-        
+
     }
 }

@@ -14,7 +14,7 @@ namespace Managers
         private EventDispatcher fixedUpdateEventDispatcher;
 
         void Update()
-        {   
+        {
             updateEventDispatcher.Dispatch();
         }
 
